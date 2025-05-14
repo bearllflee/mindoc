@@ -16,8 +16,8 @@ services:
       - /var/www/mindoc/database://mindoc/database
     environment:
       - MINDOC_RUN_MODE=prod
-      - MINDOC_DB_ADAPTER=sqlite3
-      - MINDOC_DB_DATABASE=./database/mindoc.db
+      - MINDOC_DB_ADAPTER=mysql
+      - MINDOC_DB_DATABASE=mindoc_db
       - MINDOC_CACHE=true
       - MINDOC_CACHE_PROVIDER=file
       - MINDOC_ENABLE_EXPORT=false
