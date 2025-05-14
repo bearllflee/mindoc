@@ -5,7 +5,6 @@ import (
 
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/logs"
-	"github.com/mindoc-org/mindoc/conf"
 	"github.com/mindoc-org/mindoc/models"
 	"github.com/mindoc-org/mindoc/utils/pagination"
 )
@@ -18,13 +17,17 @@ func (c *ItemsetsController) Prepare() {
 	c.BaseController.Prepare()
 
 	//如果没有开启你们访问则跳转到登录
-	if !c.EnableAnonymous && c.Member == nil {
-		c.Redirect(conf.URLFor("AccountController.Login"), 302)
-		return
+	// Ensure user is logged in for ItemsetsController actions.
+	if c.Member == nil {
+		// Store the current URL before redirecting to login
+		c.Ctx.SetCookie("redirect_url", c.Ctx.Input.URL(), 0, "/")
+		c.Ctx.Redirect(302, c.BaseUrl()+"/login")
+		c.StopRun() // Stop further processing
 	}
 }
 func (c *ItemsetsController) Index() {
 	c.Prepare()
+	// Ensure user is logged in to view project spaces list.
 	c.TplName = "items/index.tpl"
 	pageSize := 16
 

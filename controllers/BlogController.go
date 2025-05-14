@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -29,14 +28,20 @@ type BlogController struct {
 
 func (c *BlogController) Prepare() {
 	c.BaseController.Prepare()
-	if !c.EnableAnonymous && c.Member == nil {
-		c.Redirect(conf.URLFor("AccountController.Login")+"?url="+url.PathEscape(conf.BaseUrl+c.Ctx.Request.URL.RequestURI()), 302)
+	// Ensure user is logged in for BlogController actions (except potentially those explicitly allowed for anonymous).
+	// This overrides the EnableAnonymous setting for protected actions.
+	if c.Member == nil {
+		// Store the current URL before redirecting to login
+		c.Ctx.SetCookie("redirect_url", c.Ctx.Input.URL(), 0, "/")
+		c.Ctx.Redirect(302, c.BaseUrl()+"/login")
+		c.StopRun() // Stop further processing
 	}
 }
 
 // 文章阅读
 func (c *BlogController) Index() {
 	c.Prepare()
+	// Check if the user is logged in.
 	c.TplName = "blog/index.tpl"
 	blogId, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 
@@ -92,6 +97,7 @@ func (c *BlogController) Index() {
 // 文章列表
 func (c *BlogController) List() {
 	c.Prepare()
+	// Check if the user is logged in.
 	c.TplName = "blog/list.tpl"
 	pageIndex, _ := c.GetInt("page", 1)
 
@@ -287,6 +293,11 @@ func (c *BlogController) ManageSetting() {
 // 文章创建或编辑
 func (c *BlogController) ManageEdit() {
 	c.Prepare()
+	// Only Super Admins (0) and Admins (1) can access the article management/edit page.
+	if c.Member.Role != conf.MemberSuperRole && c.Member.Role != conf.MemberAdminRole {
+		c.ShowErrorPage(403, i18n.Tr(c.Lang, "message.no_permission"))
+		return // Add return to stop further processing
+	}
 	c.TplName = "blog/manage_edit.tpl"
 
 	if c.Member.Role == conf.MemberReaderRole {
@@ -294,6 +305,11 @@ func (c *BlogController) ManageEdit() {
 	}
 
 	if c.Ctx.Input.IsPost() {
+		// Only Super Admins (0) and Admins (1) can save blog content.
+		if c.Member.Role != conf.MemberSuperRole && c.Member.Role != conf.MemberAdminRole {
+			c.JsonResult(6001, i18n.Tr(c.Lang, "message.no_permission"))
+			return // Add return to stop further processing
+		}
 		blogId, _ := c.GetInt("blogId", 0)
 
 		if blogId <= 0 {

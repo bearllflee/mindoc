@@ -22,8 +22,15 @@ func (c *HomeController) Prepare() {
 	}
 }
 
-func (c *HomeController) Index() {
+func (c *HomeController) ProjectsIndex() {
 	c.Prepare()
+	// Ensure user is logged in to view the projects list.
+	if !c.isUserLoggedIn() {
+		// Store the current URL before redirecting to login
+		c.Ctx.SetCookie("redirect_url", c.Ctx.Input.URL(), 0, "/")
+		c.Ctx.Redirect(302, c.BaseUrl()+"/login")
+		c.StopRun() // Stop further processing
+	}
 	c.TplName = "home/index.tpl"
 
 	pageIndex, _ := c.GetInt("page", 1)
@@ -45,4 +52,10 @@ func (c *HomeController) Index() {
 	}
 	c.Data["TotalPages"] = int(math.Ceil(float64(totalCount) / float64(pageSize)))
 	c.Data["Lists"] = books
+}
+
+// New home page handler
+func (c *HomeController) Index() {
+	c.Prepare()
+	c.TplName = "home/new_index.tpl" // Set the template for the new home page
 }

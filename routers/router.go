@@ -120,7 +120,9 @@ func init() {
 		}
 	})
 
-	web.Router("/", &controllers.HomeController{}, "*:Index")
+	web.Router("/", &controllers.HomeController{}, "*:Index") // New home page
+
+	web.Router("/projects", &controllers.HomeController{}, "*:ProjectsIndex") // Project list page
 
 	web.Router("/login", &controllers.AccountController{}, "*:Login")
 	web.Router("/auth2/redirect/:app", &controllers.AccountController{}, "*:Auth2Redirect")

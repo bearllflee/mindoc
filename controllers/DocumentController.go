@@ -251,7 +251,7 @@ func (c *DocumentController) Read() {
 		data.DocId = doc.DocumentId
 		data.DocIdentify = doc.Identify
 		data.DocTitle = doc.DocumentName
-		data.Body = doc.Release + "<div class='wiki-bottom-left'>"+ i18n.Tr(c.Lang, "doc.prev") + "： <a href='/docs/" + PrevPath + "' rel='prev'>" + PrevName + "</a><br />" + i18n.Tr(c.Lang, "doc.next") + "： <a href='/docs/" + NextPath + "' rel='next'>" + NextName + "</a><br /></div>"
+		data.Body = doc.Release + "<div class='wiki-bottom-left'>" + i18n.Tr(c.Lang, "doc.prev") + "： <a href='/docs/" + PrevPath + "' rel='prev'>" + PrevName + "</a><br />" + i18n.Tr(c.Lang, "doc.next") + "： <a href='/docs/" + NextPath + "' rel='next'>" + NextName + "</a><br /></div>"
 		data.Title = doc.DocumentName + " - Powered by MinDoc"
 		data.Version = doc.Version
 		data.ViewCount = doc.ViewCount
@@ -283,7 +283,7 @@ func (c *DocumentController) Read() {
 	c.Data["Model"] = bookResult
 	c.Data["Result"] = template.HTML(tree)
 	c.Data["Title"] = doc.DocumentName
-	c.Data["Content"] = template.HTML(doc.Release + "<div class='wiki-bottom-left'>"+ i18n.Tr(c.Lang, "doc.prev") + "： <a href='/docs/" + PrevPath + "' rel='prev'>" + PrevName + "</a><br />" + i18n.Tr(c.Lang, "doc.next") + "： <a href='/docs/" + NextPath + "' rel='next'>" + NextName + "</a><br /></div>")
+	c.Data["Content"] = template.HTML(doc.Release + "<div class='wiki-bottom-left'>" + i18n.Tr(c.Lang, "doc.prev") + "： <a href='/docs/" + PrevPath + "' rel='prev'>" + PrevName + "</a><br />" + i18n.Tr(c.Lang, "doc.next") + "： <a href='/docs/" + NextPath + "' rel='next'>" + NextName + "</a><br /></div>")
 	c.Data["ViewCount"] = doc.ViewCount
 	c.Data["FoldSetting"] = "closed"
 	if bookResult.Editor == EditorCherryMarkdown {
@@ -1393,6 +1393,14 @@ func (c *DocumentController) Compare() {
 
 // 判断用户是否可以阅读文档
 func (c *DocumentController) isReadable(identify, token string) *models.BookResult {
+	// Only logged-in users can view documents.
+	if !c.isUserLoggedIn() {
+		// Store the current URL before redirecting to login
+		c.Ctx.SetCookie("redirect_url", c.Ctx.Input.URL(), 0, "/")
+		c.Ctx.Redirect(302, c.BaseUrl()+"/login")
+		c.StopRun() // Stop further processing
+		return nil  // Return nil as the user is not authorized
+	}
 	book, err := models.NewBook().FindByFieldFirst("identify", identify)
 
 	if err != nil {

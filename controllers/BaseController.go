@@ -36,7 +36,7 @@ type CookieRemember struct {
 
 // Prepare 预处理.
 func (c *BaseController) Prepare() {
-	c.Data["SiteName"] = "MinDoc"
+	c.Data["SiteName"] = "牧牛火链学习网"
 	c.Data["Member"] = models.NewMember()
 	controller, action := c.GetControllerAndAction()
 

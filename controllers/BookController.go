@@ -32,6 +32,17 @@ type BookController struct {
 	BaseController
 }
 
+func (c *BookController) Prepare() {
+	c.BaseController.Prepare()
+	// Ensure user is logged in for all BookController actions.
+	if !c.isUserLoggedIn() {
+		// Store the current URL before redirecting to login
+		c.Ctx.SetCookie("redirect_url", c.Ctx.Input.URL(), 0, "/")
+		c.Ctx.Redirect(302, c.BaseUrl()+"/login")
+		c.StopRun() // Stop further processing
+	}
+}
+
 func (c *BookController) Index() {
 	c.Prepare()
 	c.TplName = "book/index.tpl"
@@ -466,7 +477,8 @@ func (c *BookController) Create() {
 		editor := c.GetString("editor")
 		itemId, _ := c.GetInt("itemId")
 
-		if c.Member.Role == conf.MemberReaderRole {
+		// Only Super Admins (0) and Admins (1) can create books.
+		if c.Member.Role != conf.MemberSuperRole && c.Member.Role != conf.MemberAdminRole {
 			c.JsonResult(6001, i18n.Tr(c.Lang, "message.no_permission"))
 		}
 		if bookName == "" {

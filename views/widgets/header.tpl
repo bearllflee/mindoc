@@ -10,8 +10,11 @@
             </a>
             <nav class="collapse navbar-collapse col-sm-10">
                 <ul class="nav navbar-nav">
-                    <li {{if eq .ControllerName "HomeController"}}class="active"{{end}}>
-                        <a href="{{urlfor "HomeController.Index" }}" title={{i18n .Lang "common.home"}}>{{i18n .Lang "common.home"}}</a>
+                    <li {{if eq .ControllerName "HomeController"}}{{if eq .ActionName "Index"}}class="active"{{end}}{{end}}>
+                        <a href="{{urlfor "HomeController.Index" }}" title="首页">首页</a>
+                    </li>
+                    <li {{if eq .ControllerName "HomeController"}}{{if eq .ActionName "ProjectsIndex"}}class="active"{{end}}{{end}}>
+                         <a href="/projects" title="项目">项目</a>
                     </li>
                     <li {{if eq .ControllerName "BlogController"}}{{if eq  .ActionName "List" "Index"}}class="active"{{end}}{{end}}>
                         <a href="{{urlfor "BlogController.List" }}" title={{i18n .Lang "common.blog"}}>{{i18n .Lang "common.blog"}}</a>
@@ -30,7 +33,8 @@
                 </div>
             </nav>
             <div style="display: inline-block;" class="navbar-mobile">
-                <a href="{{urlfor "HomeController.Index" }}" title={{i18n .Lang "common.home"}}>{{i18n .Lang "common.home"}}</a>
+                <a href="{{urlfor "HomeController.Index" }}" title="首页">首页</a>
+                <a href="/projects" title="项目">项目</a>
                 <a href="{{urlfor "BlogController.List" }}" title={{i18n .Lang "common.blog"}}>{{i18n .Lang "common.blog"}}</a>
             </div>
 
@@ -41,12 +45,14 @@
                             <li>
                                 <a href="{{urlfor "SettingController.Index"}}" title={{i18n .Lang "common.person_center"}}><i class="fa fa-user" aria-hidden="true"></i> {{i18n .Lang "common.person_center"}}</a>
                             </li>
+                            {{if or (eq .Member.Role 0) (eq .Member.Role 1)}}
                             <li>
                                 <a href="{{urlfor "BookController.Index"}}" title={{i18n .Lang "common.my_project"}}><i class="fa fa-book" aria-hidden="true"></i> {{i18n .Lang "common.my_project"}}</a>
                             </li>
                             <li>
                                 <a href="{{urlfor "BlogController.ManageList"}}" title={{i18n .Lang "common.my_blog"}}><i class="fa fa-file" aria-hidden="true"></i> {{i18n .Lang "common.my_blog"}}</a>
                             </li>
+                            {{end}}
                             {{if eq .Member.Role 0 }}
                             <li>
                                 <a href="{{urlfor "ManagerController.Index"}}" title={{i18n .Lang "common.manage"}}><i class="fa fa-university" aria-hidden="true"></i> {{i18n .Lang "common.manage"}}</a>
@@ -79,13 +85,15 @@
                         <li>
                             <a href="{{urlfor "SettingController.Index"}}" title={{i18n .Lang "common.person_center"}}><i class="fa fa-user" aria-hidden="true"></i> {{i18n .Lang "common.person_center"}}</a>
                         </li>
+                        {{if or (eq .Member.Role 0) (eq .Member.Role 1)}}
                         <li>
                             <a href="{{urlfor "BookController.Index"}}" title={{i18n .Lang "common.my_project"}}><i class="fa fa-book" aria-hidden="true"></i> {{i18n .Lang "common.my_project"}}</a>
                         </li>
                         <li>
                             <a href="{{urlfor "BlogController.ManageList"}}" title={{i18n .Lang "common.my_blog"}}><i class="fa fa-file" aria-hidden="true"></i> {{i18n .Lang "common.my_blog"}}</a>
                         </li>
-                        {{if eq .Member.Role 0  1}}
+                        {{end}}
+                        {{if or (eq .Member.Role 0) (eq .Member.Role 1)}}
                         <li>
                             <a href="{{urlfor "ManagerController.Index"}}" title={{i18n .Lang "common.manage"}}><i class="fa fa-university" aria-hidden="true"></i> {{i18n .Lang "common.manage"}}</a>
                         </li>

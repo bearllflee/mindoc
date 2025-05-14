@@ -4,10 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/mindoc-org/mindoc/cache"
-	"github.com/mindoc-org/mindoc/utils/auth2"
-	"github.com/mindoc-org/mindoc/utils/auth2/dingtalk"
-	"github.com/mindoc-org/mindoc/utils/auth2/wecom"
 	"html/template"
 	"math/rand"
 	"net/http"
@@ -15,6 +11,11 @@ import (
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/mindoc-org/mindoc/cache"
+	"github.com/mindoc-org/mindoc/utils/auth2"
+	"github.com/mindoc-org/mindoc/utils/auth2/dingtalk"
+	"github.com/mindoc-org/mindoc/utils/auth2/wecom"
 
 	"github.com/beego/beego/v2/client/orm"
 	"github.com/beego/beego/v2/core/logs"
@@ -152,7 +153,14 @@ func (c *AccountController) Login() {
 				}
 			}
 
-			c.JsonResult(0, "ok", c.referer())
+			redirectURL := c.Ctx.GetCookie("redirect_url")
+			if redirectURL == "" {
+				redirectURL = "/" // Default redirect to the new home page
+			} else {
+				// Clear the redirect_url cookie
+				c.Ctx.SetCookie("redirect_url", "", -1, "/")
+			}
+			c.JsonResult(0, "ok", redirectURL)
 		} else {
 			logs.Error("用户登录 ->", err)
 			c.JsonResult(500, i18n.Tr(c.Lang, "message.wrong_account_password"), nil)
