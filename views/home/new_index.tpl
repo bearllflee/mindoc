@@ -76,7 +76,7 @@
         <div class="hero-section">
             <div class="container">
                 <h1>欢迎来到 牧牛火链 学习网站</h1>
-                <p>一个简单易用的开源文档管理和学习平台</p>
+                <p>一个简单易用的学习平台</p>
                 <p>
                     <a href="/projects" class="btn btn-primary btn-lg">探索项目</a>
                     <a href="/blogs" class="btn btn-secondary btn-lg">阅读最新文章</a>

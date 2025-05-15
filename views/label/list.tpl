@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>标签列表 - Powered by MinDoc</title>
-    <meta name="keywords" content="MinDoc,文档在线管理系统,WIKI,wiki,wiki在线,文档在线管理,接口文档在线管理,接口文档管理">
-    <meta name="description" content="MinDoc文档在线管理系统 {{.site_description}}">
+    <title>标签列表 - Powered by 牧牛火链</title>
+    <meta name="keywords" content="牧牛火链,文档在线管理系统,WIKI,wiki,wiki在线,文档在线管理,接口文档在线管理,接口文档管理">
+    <meta name="description" content="牧牛火链文档在线管理系统 {{.site_description}}">
     <meta name="author" content="Minho" />
     <meta name="site" content="https://www.iminho.me" />
     <!-- Bootstrap -->

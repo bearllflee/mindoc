@@ -252,7 +252,7 @@ func (c *DocumentController) Read() {
 		data.DocIdentify = doc.Identify
 		data.DocTitle = doc.DocumentName
 		data.Body = doc.Release + "<div class='wiki-bottom-left'>" + i18n.Tr(c.Lang, "doc.prev") + "： <a href='/docs/" + PrevPath + "' rel='prev'>" + PrevName + "</a><br />" + i18n.Tr(c.Lang, "doc.next") + "： <a href='/docs/" + NextPath + "' rel='next'>" + NextName + "</a><br /></div>"
-		data.Title = doc.DocumentName + " - Powered by MinDoc"
+		data.Title = doc.DocumentName + " - Powered by 牧牛火链"
 		data.Version = doc.Version
 		data.ViewCount = doc.ViewCount
 		data.MarkdownTheme = doc.MarkdownTheme

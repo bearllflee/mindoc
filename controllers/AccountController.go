@@ -94,7 +94,7 @@ func (c *AccountController) Prepare() {
 
 // Login 用户登录
 func (c *AccountController) Login() {
-	c.TplName = "account/login.tpl"
+	c.TplName = "account/modern_login.tpl"
 
 	if member, ok := c.GetSession(conf.LoginSessionName).(models.Member); ok && member.MemberId > 0 {
 		u := c.GetString("url")
@@ -1161,7 +1161,7 @@ func (c *AccountController) LoggedIn(isPost bool) interface{} {
 
 // 用户注册
 func (c *AccountController) Register() {
-	c.TplName = "account/register.tpl"
+	c.TplName = "account/modern_register.tpl"
 
 	//如果用户登录了，则跳转到网站首页
 	if member, ok := c.GetSession(conf.LoginSessionName).(models.Member); ok && member.MemberId > 0 {

@@ -7,7 +7,7 @@
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="MinDoc" />
-    <title>{{i18n .Lang "common.login"}} - Powered by MinDoc</title>
+    <title>{{i18n .Lang "common.login"}} - Powered by 牧牛火链</title>
     <meta name="keywords" content="MinDoc,文档在线管理系统,WIKI,wiki,wiki在线,文档在线管理,接口文档在线管理,接口文档管理">
     <meta name="description" content="MinDoc文档在线管理系统 {{.site_description}}">
     <!-- Bootstrap -->
